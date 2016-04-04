@@ -136,10 +136,10 @@
 
   /**
    * Get element attribute.
-   * 
+   *
    * @param {HTMLInputElement} element
    * @param {String} attributeName
-   * 
+   *
    * @returns {String}
    */
   FormValidator.prototype.getAttributeValue = function (element, attributeName) {
@@ -446,20 +446,19 @@
    * @returns {string}
    */
   FormValidator.prototype._getMessage = function (fieldName, method, param) {
-    var field = this.fields[fieldName] || {};
-    var source = this.messages[field + '.' + method] || this.messages[method] || defaults.messages[method],
-        message = 'An error has occurred with the ' + field.display + ' field.';
+
+    var field   = this.fields[fieldName] || {},
+        source  = this.messages[field + '.' + method] || this.messages[method] || defaults.messages[method],
+        message = 'An error has occurred with the ' + field.display + ' field.',
+        params  = param ? this.fields[param] ? this.fields[param].display : param : [];
+
 
     if (null === source) {
       return '';
     }
 
     if (source) {
-      message = this.replace(source, field.display);
-
-      if (param) {
-        message = this.replace(message, (this.fields[param]) ? this.fields[param].display : param);
-      }
+      message = this.replace(source, field.display, params);
     }
 
     return message;
@@ -469,34 +468,24 @@
   /**
    * Replace in message.
    *
-   * @param {*}      source
-   * @param {String} replace
+   * @param {String|String[]} source
+   * @param {String|String[]} display
+   * @param {String|String[]} params
    */
-  FormValidator.prototype.replace = function (source, replace) {
-    source  = Array.isArray(source) ? source : [source];
-    replace = Array.isArray(replace) ? replace : [replace];
+  FormValidator.prototype.replace = function (source, display, params) {
+    var replace = [];
+
+    source = Array.isArray(source) ? source : [source];
+    params = Array.isArray(params) ? params : [params];
+
+    replace.push(display);
+    replace = replace.concat(params);
 
     for(var s in source) {
       source[s] = FormValidator.prototype.formatString.apply(source[s], replace);
     }
 
     return 1 == source.length ? source[0] : source;
-    //
-    // for (var k in source) {
-    //   var val = source[k];
-    //
-    //   if ('%p' == search && Array.isArray(replacement)) {
-    //     for (var kv in replacement) {
-    //       var p = parseInt(kv) + 1;
-    //       val = val.replace(search + '' + p, replacement[kv]);
-    //     }
-    //     source[k] = val;
-    //   } else {
-    //     source[k] = val.replace(search, replacement);
-    //   }
-    // }
-    //
-    // return 1 == source.length ? source[0] : source;
   };
 
   /**
@@ -731,13 +720,13 @@
     words_count_max: function (field, max) {
       var count = field.value.split(wordsCountRegex).length - 1;
 
-      return count > max;
+      return count <= max;
     },
 
     words_count_min: function (field, min) {
       var count = field.value.split(wordsCountRegex).length - 1;
 
-      return count < min;
+      return count >= min;
     },
 
     // todo@alexbuturlakin: remove one_word and two_words or add words_count validator
