@@ -477,7 +477,7 @@
     replace = Array.isArray(replace) ? replace : [replace];
 
     for(var s in source) {
-      source[s] = FormValidator.prototype.formatString.apply(val, replace);
+      source[s] = FormValidator.prototype.formatString.apply(source[s], replace);
     }
 
     return 1 == source.length ? source[0] : source;

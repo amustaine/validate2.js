@@ -4,7 +4,7 @@ This project has been forked from https://github.com/rickharrison/validate.js
 
 ## Install
 
-    bower install validate2 --save-dev
+    bower install validate2 --save
 
 ## Examples
 
