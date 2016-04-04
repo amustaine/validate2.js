@@ -1,0 +1,23 @@
+{
+  "name": "validate2",
+  "version": "0.0.2",
+  "description": "Lightweight JavaScript form validation library.",
+  "main": "validate2.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/amustaine/validate2.js"
+  },
+  "keywords": [
+    "validate",
+    "form",
+    "dom",
+    "browser",
+    "browserify"
+  ],
+  "author": "Alex Buturlakin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/amustaine/validate2.js/issues"
+  },
+  "homepage": "https://github.com/amustaine/validate2.js"
+}
