@@ -7,7 +7,7 @@
   "_resolution": {
     "type": "version",
     "tag": "v0.0.2",
-    "commit": "8d938952b6889185fb13220f9c2a136deab3954d"
+    "commit": "88d4663ee3f60210cb1d24cf14e70e45ab5071cf"
   },
   "_source": "https://github.com/amustaine/validate2.js.git",
   "_target": "^0.0.2",
