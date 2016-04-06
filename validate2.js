@@ -74,7 +74,7 @@
       urlRegex = /^((http|https):\/\/(\w+:{0,1}\w*@)?(\S+)|)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/,
       dateRegex = /\d{4}-\d{1,2}-\d{1,2}/,
       englishRegex = /^[a-zA-Z\s]+$/,
-      passwordRegex = /^(?=.*[0-9])(?=.*[a-z|A-Z|\u0590-\u05FF]).{8,}$/,
+      passwordRegex = /^(?=.*[0-9])(?=.*[a-z|A-Z]).{8,}$/,
       wordsCountRegex = /\b\S+\b/g,
   // companyRegex = /(?:^|\s)(?:Corporation|Corp|Inc|Incorporated|Company|LTD|PLLC|P\.C)\.?$/ig
       companyRegex = /\bLTD\b/;
