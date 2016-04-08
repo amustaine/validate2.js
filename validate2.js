@@ -112,6 +112,7 @@
     this.messages = {};
     this.handlers = {};
     this.conditionals = {};
+    this.defaultGroup = 'default';
 
     for (var i = 0, fieldLength = fields.length; i < fieldLength; i++) {
       var field = fields[i];
@@ -218,6 +219,7 @@
       display: field.display || nameValue,
       rules: field.rules,
       depends: field.depends,
+      group: typeof field.group === typeof undefined ? this.defaultGroup : field.group,
       id: null,
       element: null,
       type: null,
@@ -231,19 +233,22 @@
    * Runs the validation when the form is submitted.
    */
 
-  FormValidator.prototype._validateForm = function () {
+  FormValidator.prototype._validateForm = function (groups) {
+    groups = groups || [];
+
     // clean errors
     this.cleanErrors();
 
-    // validate form fields
+    // validate fields
     for (var key in this.fields) {
-      this.validateField(key, 'form');
+      this.validateField(key, 'form', groups);
     }
 
     // execute callbacks
     this._executeCallbacks('form', [
       0 === Object.keys(this.errors).length,
-      this.errors
+      this.errors,
+      groups
     ], this.form);
 
     // result
@@ -284,13 +289,16 @@
   /**
    * @param {String} fieldName
    */
-  FormValidator.prototype.validateField = function (fieldName, type) {
-    type = type || 'single';
+  FormValidator.prototype.validateField = function (fieldName, type, groups) {
+    type   = type   || 'single';
+    groups = groups || [];
+
     if (this.fields.hasOwnProperty(fieldName)) {
-      var field = this.fields[fieldName] || {},
+      var field   = this.fields[fieldName] || {},
+          group   = field.group,
           element = this.form[field.name];
 
-      if (element && element !== undefined) {
+      if (element && element !== undefined && (0 == groups.length || groups.indexOf(group) > -1)) {
         field.id      = this.getAttributeValue(element, 'id');
         field.element = element;
         field.type    = (element.length > 0) ? element[0].type : element.type;
@@ -319,7 +327,8 @@
         !(fieldName in this.errors),
         type,
         field,
-        fieldName in this.errors ? this.errors[fieldName] : []
+        fieldName in this.errors ? this.errors[fieldName] : [],
+        groups
       ], field.element);
     }
   };
@@ -446,12 +455,10 @@
    * @returns {string}
    */
   FormValidator.prototype._getMessage = function (fieldName, method, param) {
-
     var field   = this.fields[fieldName] || {},
-        source  = this.messages[field + '.' + method] || this.messages[method] || defaults.messages[method],
+        source  = this.messages[fieldName + '.' + method] || this.messages[method] || defaults.messages[method],
         message = 'An error has occurred with the ' + field.display + ' field.',
         params  = param ? this.fields[param] ? this.fields[param].display : param : [];
-
 
     if (null === source) {
       return '';
